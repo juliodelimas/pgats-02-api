@@ -3,7 +3,17 @@
   "info": {
     "title": "API de Transferências e Usuários",
     "version": "1.0.0",
-    "description": "API para login, registro, consulta de usuários e transferências."
+    "description": "API para login, registro, consulta de usuários e transferências. As rotas de transferências requerem autenticação JWT via Bearer token."
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token obtido através do endpoint /users/login"
+      }
+    }
   },
   "paths": {
     "/users/register": {
@@ -50,7 +60,22 @@
           }
         },
         "responses": {
-          "200": { "description": "Login bem-sucedido" },
+          "200": {
+            "description": "Login bem-sucedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": { "type": "string" },
+                    "favorecidos": { "type": "array", "items": { "type": "string" } },
+                    "saldo": { "type": "number" },
+                    "token": { "type": "string", "description": "JWT token para autenticação nas rotas protegidas" }
+                  }
+                }
+              }
+            }
+          },
           "400": { "description": "Usuário ou senha inválidos" }
         }
       }
@@ -66,6 +91,11 @@
     "/transfers": {
       "post": {
         "summary": "Realizar transferência",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -84,13 +114,22 @@
         },
         "responses": {
           "201": { "description": "Transferência realizada" },
-          "400": { "description": "Erro de validação ou regra de negócio" }
+          "400": { "description": "Erro de validação ou regra de negócio" },
+          "401": { "description": "Token de acesso requerido" },
+          "403": { "description": "Token inválido ou expirado" }
         }
       },
       "get": {
         "summary": "Listar transferências",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Lista de transferências" }
+          "200": { "description": "Lista de transferências" },
+          "401": { "description": "Token de acesso requerido" },
+          "403": { "description": "Token inválido ou expirado" }
         }
       }
     }
