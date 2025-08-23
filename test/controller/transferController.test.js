@@ -68,11 +68,17 @@ describe('Transfer Controller', () => {
                 });
             
             expect(resposta.status).to.equal(201);
+
+            // validação com fixture
+            const respostaEsperada = require('../fixture/respostas/quandoInformoValoresValidosEuTenhoSucessoCom201Created.json');
+            delete resposta.body.date;
+            delete respostaEsperada.date; // remove o campo date da resposta esperada, pois o date é dinâmico
+            expect(resposta.body).to.deep.equal(respostaEsperada); //deep.equal nao se importa com a ordem dos campos, recursivo
             
             // Um expect para comparar a Resposta.body com a String contida no arquivo
-            expect(resposta.body).to.have.property('from', 'julio');
-            expect(resposta.body).to.have.property('to', 'priscila');
-            expect(resposta.body).to.have.property('value', 100);
+            // expect(resposta.body).to.have.property('from', 'julio');
+            // expect(resposta.body).to.have.property('to', 'priscila');
+            // expect(resposta.body).to.have.property('value', 100);
 
             console.log(resposta.body)
 
