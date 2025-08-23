@@ -22,5 +22,14 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run software tests
-      run: npm test
+    - name: Run tests controller
+      run: npm run test-controller
+
+    - name: Subir a API
+      run: npm start &
+
+    - name: Esperar a API estar funcionando
+      run: sleep 5
+
+    - name: Run tests API via HTTP
+      run: npm run test-external
