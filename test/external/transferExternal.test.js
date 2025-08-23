@@ -5,7 +5,7 @@ const { expect } = require('chai');
 // Testes
 describe('Transfer', () => {
     describe('POST /transfers', () => {
-        it.only('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
+        it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
             //capturar o token
             const respostaLogin = await request('http://localhost:3000')
             .post('/users/login')
@@ -30,7 +30,7 @@ describe('Transfer', () => {
         });
 
 
-        it.only('Quando informo remetente e destinatario existente e autenticado recebo 201', async () => {
+        it('Quando informo remetente e destinatario existente e autenticado recebo 201', async () => {
             //capturar o token
             const respostaLogin = await request('http://localhost:3000')
             .post('/users/login')

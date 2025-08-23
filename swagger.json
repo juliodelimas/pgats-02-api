@@ -115,7 +115,23 @@
         "responses": {
           "201": { "description": "Transferência realizada" },
           "400": { "description": "Erro de validação ou regra de negócio" },
-          "401": { "description": "Token de acesso requerido" },
+          "401": { 
+            "description": "Token de acesso requerido ou usuário não encontrado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "sem_token": {
+                    "summary": "Token não fornecido",
+                    "value": { "error": "Token de acesso requerido. Use: Authorization: Bearer {token}" }
+                  },
+                  "usuario_removido": {
+                    "summary": "Usuário foi removido do sistema",
+                    "value": { "error": "Usuário não encontrado ou foi removido do sistema" }
+                  }
+                }
+              }
+            }
+          },
           "403": { "description": "Token inválido ou expirado" }
         }
       },
@@ -128,7 +144,23 @@
         ],
         "responses": {
           "200": { "description": "Lista de transferências" },
-          "401": { "description": "Token de acesso requerido" },
+          "401": { 
+            "description": "Token de acesso requerido ou usuário não encontrado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "sem_token": {
+                    "summary": "Token não fornecido",
+                    "value": { "error": "Token de acesso requerido. Use: Authorization: Bearer {token}" }
+                  },
+                  "usuario_removido": {
+                    "summary": "Usuário foi removido do sistema",
+                    "value": { "error": "Usuário não encontrado ou foi removido do sistema" }
+                  }
+                }
+              }
+            }
+          },
           "403": { "description": "Token inválido ou expirado" }
         }
       }
