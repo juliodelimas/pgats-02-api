@@ -3,11 +3,14 @@ const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-// Aplicação
-const app = require('../../app');
-
 // Mock
 const transferService = require('../../service/transferService');
+
+const authStub = sinon.stub().callsFake((req, res, next) => next());
+require.cache[require.resolve('../../middleware/authenticateToken')] = { exports: authStub };
+
+// Aplicação
+const app = require('../../app');
 
 // Testes
 describe('Transfer Controller', () => {
@@ -17,7 +20,7 @@ describe('Transfer Controller', () => {
                 .post('/transfers')
                 .send({
                     from: "julio",
-                    to: "priscila",
+                    to: "isabelle",
                     value: 100
                 });
             
