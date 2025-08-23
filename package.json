@@ -4,7 +4,9 @@
   "description": "Esta API permite o registro, login, consulta de usuários e transferências de valores entre usuários. O objetivo é servir de base para estudos de testes e automação de APIs.",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/**/*.test.js' --timeout 10000",
+    "test": "mocha \"test/**/*.test.js\" --timeout 10000",
+    "test-external": "mocha \"test/external/**/*.test.js\" --timeout 10000",
+    "test-controller": "mocha \"test/controller/**/*.test.js\" --timeout 10000",
     "start": "node server.js"
   },
   "keywords": [],
