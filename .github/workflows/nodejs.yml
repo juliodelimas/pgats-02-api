@@ -19,10 +19,10 @@ jobs:
       with:
         node-version: '20.x'
 
-    - name: Install dependencies
+    - name: Instalar dependências
       run: npm install
 
-    - name: Run software tests
+    - name: Executar testes de software
       run: npm run test-controller
 
     - name: Subir a API 
@@ -31,5 +31,5 @@ jobs:
     - name: Esperar a API estar Funcionando
       run: sleep 5  # segundos
 
-    - name: Rodar os testes de API via HTTP
+    - name: Executar testes de API via HTTP
       run: npm run test-external

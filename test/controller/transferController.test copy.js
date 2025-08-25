@@ -12,21 +12,9 @@ const transferService = require('../../service/transferService');
 // Testes
 describe('Transfer Controller', () => {
     describe('POST /transfers', () => {
-        
-        beforeEach(async () => {
-            const respostaLogin = await request(app)
-                .post('/users/login')
-                .send({
-                    username: 'julio',
-                    password: '123456'
-                });
-            this.tokens = respostaLogin.body.token;
-        })
-        
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
             const resposta = await request(app)
                 .post('/transfers')
-                .set('Authorization', `Bearer ${this.tokens}`)
                 .send({
                     from: "julio",
                     to: "priscila",
@@ -44,7 +32,6 @@ describe('Transfer Controller', () => {
 
             const resposta = await request(app)
                 .post('/transfers')
-                .set('Authorization', `Bearer ${this.tokens}`)
                 .send({
                     from: "julio",
                     to: "priscila",
@@ -70,7 +57,6 @@ describe('Transfer Controller', () => {
 
             const resposta = await request(app)
                 .post('/transfers')
-                .set('Authorization', `Bearer ${this.tokens}`)
                 .send({
                     from: "julio",
                     to: "priscila",
@@ -101,7 +87,6 @@ describe('Transfer Controller', () => {
 
             const resposta = await request(app)
                 .post('/transfers')
-                .set('Authorization', `Bearer ${this.tokens}`)
                 .send({
                     from: "julio",
                     to: "priscila",
@@ -110,14 +95,18 @@ describe('Transfer Controller', () => {
             
             // Validação com um Fixture
             const respostaEsperada = require('../fixture/respostas/valoresValidosCom201CreatedSucesso.json');
-            // Esses delete serve para desprezar as propriedades dinâmicas, ex.: data será ignorada
             delete resposta.body.date;
             delete respostaEsperada.date;
-            // deep.equal = eql = > comparar os objetos e propriedade de maneira recursiva, independe da ordem apresentada
             expect(resposta.body).to.deep.equal(respostaEsperada);
 
-           // console.log((resposta.body));
-           
+            /*
+            expect(resposta.status).to.equal(201);
+            expect(resposta.body).to.have.property('from', 'julio');
+            expect(resposta.body).to.have.property('to', 'priscila');
+            expect(resposta.body).to.have.property('value', 100);
+
+            console.log((resposta.body));
+            */
 
             // Reseto o Mock
             sinon.restore();

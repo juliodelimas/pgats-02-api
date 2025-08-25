@@ -8,6 +8,7 @@ Esta API permite o registro, login, consulta de usuários e transferências de v
 - Swagger (documentação)
 - Banco de dados em memória (variáveis)
 
+
 ## Instalação
 
 1. Clone o repositório:
@@ -15,10 +16,27 @@ Esta API permite o registro, login, consulta de usuários e transferências de v
    git clone <repo-url>
    cd pgats-02-api
    ```
+
 2. Instale as dependências:
-   ```sh
-   npm install express swagger-ui-express bcryptjs
-   ```
+  ```sh
+  npm install express swagger-ui-express bcryptjs
+  ```
+
+### Relatórios de Testes com Mochawesome
+
+Para gerar relatórios de testes em formato HTML e JSON, instale o pacote [mochawesome](https://github.com/adamgruber/mochawesome) como dependência de desenvolvimento:
+
+```sh
+npm install -D mochawesome
+```
+
+O `mochawesome` é um repórter para o framework de testes Mocha, que permite criar relatórios visuais e detalhados dos testes automatizados. Após instalar, você pode rodar seus testes com o seguinte comando para gerar o relatório:
+
+```sh
+mocha --reporter mochawesome
+```
+
+O relatório será gerado na pasta `mochawesome-report` do projeto.
 
 ## Como rodar
 
