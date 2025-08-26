@@ -21,6 +21,9 @@ describe('Transfer Controller', () => {
                     password: '123456'
                 });
             this.tokens = respostaLogin.body.token;
+            
+            // Reseta o Mock Julio colocou no final
+            sinon.restore();
         })
         
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
@@ -29,7 +32,7 @@ describe('Transfer Controller', () => {
                 .set('Authorization', `Bearer ${this.tokens}`)
                 .send({
                     from: "julio",
-                    to: "priscila",
+                    to: "izabelle",
                     value: 100
                 });
             
@@ -54,8 +57,6 @@ describe('Transfer Controller', () => {
             expect(resposta.status).to.equal(400);
             expect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado')
 
-            // Reseto o Mock
-            sinon.restore();
         });
 
         it('Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED', async () => {
@@ -84,9 +85,6 @@ describe('Transfer Controller', () => {
 
             //console.log((resposta.body));
             
-
-            // Reseto o Mock
-            sinon.restore();
         });
 
         it('Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED e comparo com a fixture', async () => {
@@ -118,9 +116,6 @@ describe('Transfer Controller', () => {
 
            // console.log((resposta.body));
            
-
-            // Reseto o Mock
-            sinon.restore();
         });
     });
 
