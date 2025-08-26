@@ -72,7 +72,32 @@ O relatório será gerado na pasta `mochawesome-report` do projeto.
 - O saldo inicial de cada usuário é de R$ 10.000,00.
 
 ## Testes
-- O arquivo `app.js` pode ser importado em ferramentas de teste como Supertest.
+
+O projeto possui testes automatizados para os principais endpoints, localizados na pasta `test/`. Os testes utilizam Mocha, Chai, Supertest e Sinon para mocks.
+
+- Para rodar todos os testes:
+  ```sh
+  npm test
+  ```
+
+- Para rodar os testes e gerar um relatório visual com o Mochawesome:
+  ```sh
+  npx mocha --reporter mochawesome
+  ```
+
+- O relatório será gerado na pasta `mochawesome-report` em formato HTML e JSON.
+
+### Estrutura dos testes
+
+- `test/controller/`: Testes dos controllers, incluindo mocks das funções de serviço.
+- `test/external/`: Testes de integração com serviços externos.
+- `test/fixture/`: Dados de exemplo para os testes.
+
+### Exemplo de teste mockando o service
+
+No arquivo `test/controller/userController.test.js`, o método `listUsers` do service é mockado para garantir isolamento dos testes de API.
+
+---
 
 ---
 
