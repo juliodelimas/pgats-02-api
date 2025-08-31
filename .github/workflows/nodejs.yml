@@ -2,34 +2,80 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      API_BASE_URL: "http://localhost:4000"
+      GRAPHQL_PATH: "/graphql"
+      PORT: "4000"
+      NODE_ENV: "test"
+      JWT_SECRET: "dummy-ci"
+
+      # usa secrets, mas com fallback se estiverem vazios
+      LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME || 'alice' }}
+      LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD || '123456' }}
+
+      SENDER_OK_ID: "alice"
+      RECEIVER_OK_ID: "bob"
+      SENDER_NO_FUNDS_ID: "user_sem_saldo"
+      AMOUNT_SUCCESS: "50"
+      AMOUNT_NO_FUNDS: "999999"
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Rodar os testes de API via Controller
-      run: npm run test-controller
+      - name: Run controller tests
+        run: npm run test-controller
 
-    - name: Subir a API 
-      run: npm start &
+      - name: Start GraphQL API (background + logs)
+        run: |
+          npm run start-graphql > server.log 2>&1 &
+          echo "PID=$!" > server.pid
+          sleep 2
+          echo "Server started, tailing last lines:"
+          tail -n 20 server.log || true
 
-    - name: Esperar a API estar Funcionando
-      run: sleep 5
+      # espera pela porta (evita 404/405 no GET /graphql)
+      - name: Wait for API to be ready (TCP 4000, timeout 120s)
+        run: npx --yes wait-on --timeout 120000 tcp:4000 || (echo '---- server.log ----' && cat server.log && exit 1)
 
-    - name: Rodar os testes de API via HTTP
-      run: npm run test-external
+      - name: Run external API tests
+        run: npm run test-external
+
+      - name: Upload mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: mochawesome-report/
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: server.log
+
+      - name: Stop GraphQL API
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill "$(cat server.pid)" || true
+          fi
