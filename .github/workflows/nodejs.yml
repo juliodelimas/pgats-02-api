@@ -14,13 +14,13 @@ jobs:
     env:
       API_BASE_URL: "http://localhost:4000"
       GRAPHQL_PATH: "/graphql"
-      PORT: "4000" # garante porta
+      PORT: "4000"
       NODE_ENV: "test"
       JWT_SECRET: "dummy-ci"
 
-      # use SECRETS em repositório público:
-      LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
-      LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+      # usa secrets, mas com fallback se estiverem vazios
+      LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME || 'alice' }}
+      LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD || '123456' }}
 
       SENDER_OK_ID: "alice"
       RECEIVER_OK_ID: "bob"
@@ -52,7 +52,7 @@ jobs:
           echo "Server started, tailing last lines:"
           tail -n 20 server.log || true
 
-      # ✅ espera pela porta em vez de GET /graphql
+      # espera pela porta (evita 404/405 no GET /graphql)
       - name: Wait for API to be ready (TCP 4000, timeout 120s)
         run: npx --yes wait-on --timeout 120000 tcp:4000 || (echo '---- server.log ----' && cat server.log && exit 1)
 
@@ -77,5 +77,5 @@ jobs:
         if: always()
         run: |
           if [ -f server.pid ]; then
-            kill $(cat server.pid) || true
+            kill "$(cat server.pid)" || true
           fi
