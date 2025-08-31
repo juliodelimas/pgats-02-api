@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha 'test/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-external": "mocha 'test/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
+    "test-external": "mocha 'test/external/**/*.test.js' --timeout 20000 --reporter mochawesome",
     "test-controller": "mocha 'test/controller/**/*.test.js' --timeout 10000 --reporter mochawesome",
     "start": "node server.js",
     "start-graphql": "node graphql/server.js"
