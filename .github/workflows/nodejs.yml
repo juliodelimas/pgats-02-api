@@ -14,9 +14,14 @@ jobs:
     env:
       API_BASE_URL: "http://localhost:4000"
       GRAPHQL_PATH: "/graphql"
+      PORT: "4000" # garante porta
+      NODE_ENV: "test"
+      JWT_SECRET: "dummy-ci" # se sua API exige; use um valor simples no CI
+
       # use SECRETS em repositório público:
       LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
       LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+
       SENDER_OK_ID: "alice"
       RECEIVER_OK_ID: "bob"
       SENDER_NO_FUNDS_ID: "user_sem_saldo"
@@ -44,13 +49,13 @@ jobs:
         run: |
           npm run start-graphql > server.log 2>&1 &
           echo "PID=$!" > server.pid
-          sleep 1
+          sleep 2
           echo "Server started, tailing last lines:"
-          tail -n +1 server.log | sed -e 's/^/[api] /' &
+          tail -n 20 server.log || true
 
       # Espera com timeout e erro explícito se não subir
-      - name: Wait for API to be ready (timeout 90s)
-        run: npx --yes wait-on --timeout 90000 http://localhost:4000/graphql
+      - name: Wait for API to be ready (timeout 120s)
+        run: npx --yes wait-on --timeout 120000 http://localhost:4000/graphql || (echo '---- server.log ----' && cat server.log && exit 1)
 
       - name: Run external API tests
         run: npm run test-external
