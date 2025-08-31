@@ -5,11 +5,13 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch: {} # 👈 habilita o botão "Run workflow"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Em repositório público, prefira SECRETS (ver nota abaixo)
     env:
       API_BASE_URL: "http://localhost:4000"
       GRAPHQL_PATH: "/graphql"
@@ -29,14 +31,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.x"
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run controller tests
         run: npm run test-controller
 
-      - name: Start API
+      - name: Start GraphQL API
         run: npm run start-graphql &
 
       - name: Wait for API to be ready
@@ -44,3 +47,11 @@ jobs:
 
       - name: Run external API tests
         run: npm run test-external
+
+      # Opcional: publicar o relatório mochawesome como artifact
+      - name: Upload mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: mochawesome-report/
