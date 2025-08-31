@@ -16,7 +16,7 @@ jobs:
       GRAPHQL_PATH: "/graphql"
       PORT: "4000" # garante porta
       NODE_ENV: "test"
-      JWT_SECRET: "dummy-ci" # se sua API exige; use um valor simples no CI
+      JWT_SECRET: "dummy-ci"
 
       # use SECRETS em repositório público:
       LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
@@ -44,7 +44,6 @@ jobs:
       - name: Run controller tests
         run: npm run test-controller
 
-      # Sobe a API e grava logs
       - name: Start GraphQL API (background + logs)
         run: |
           npm run start-graphql > server.log 2>&1 &
@@ -53,14 +52,13 @@ jobs:
           echo "Server started, tailing last lines:"
           tail -n 20 server.log || true
 
-      # Espera com timeout e erro explícito se não subir
-      - name: Wait for API to be ready (timeout 120s)
-        run: npx --yes wait-on --timeout 120000 http://localhost:4000/graphql || (echo '---- server.log ----' && cat server.log && exit 1)
+      # ✅ espera pela porta em vez de GET /graphql
+      - name: Wait for API to be ready (TCP 4000, timeout 120s)
+        run: npx --yes wait-on --timeout 120000 tcp:4000 || (echo '---- server.log ----' && cat server.log && exit 1)
 
       - name: Run external API tests
         run: npm run test-external
 
-      # Sempre publica relatório e logs (mesmo se falhar)
       - name: Upload mochawesome report
         if: always()
         uses: actions/upload-artifact@v4
@@ -75,7 +73,6 @@ jobs:
           name: server-log
           path: server.log
 
-      # Encerra o processo da API
       - name: Stop GraphQL API
         if: always()
         run: |
