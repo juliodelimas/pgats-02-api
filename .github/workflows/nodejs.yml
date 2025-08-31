@@ -14,6 +14,7 @@ jobs:
     env:
       API_BASE_URL: "http://localhost:4000"
       GRAPHQL_PATH: "/graphql"
+      # use SECRETS em repositório público:
       LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
       LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
       SENDER_OK_ID: "alice"
@@ -38,18 +39,41 @@ jobs:
       - name: Run controller tests
         run: npm run test-controller
 
-      - name: Start GraphQL API
-        run: npm run start-graphql &
+      # Sobe a API e grava logs
+      - name: Start GraphQL API (background + logs)
+        run: |
+          npm run start-graphql > server.log 2>&1 &
+          echo "PID=$!" > server.pid
+          sleep 1
+          echo "Server started, tailing last lines:"
+          tail -n +1 server.log | sed -e 's/^/[api] /' &
 
-      - name: Wait for API to be ready
-        run: npx --yes wait-on http://localhost:4000/graphql
+      # Espera com timeout e erro explícito se não subir
+      - name: Wait for API to be ready (timeout 90s)
+        run: npx --yes wait-on --timeout 90000 http://localhost:4000/graphql
 
       - name: Run external API tests
         run: npm run test-external
 
+      # Sempre publica relatório e logs (mesmo se falhar)
       - name: Upload mochawesome report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mochawesome-report
           path: mochawesome-report/
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: server.log
+
+      # Encerra o processo da API
+      - name: Stop GraphQL API
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
