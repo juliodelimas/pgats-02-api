@@ -5,9 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha 'test/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-external": "mocha 'test/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-controller": "mocha 'test/controller/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "start": "node server.js",
+    "test-external-rest": "mocha 'test/rest/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
+    "test-external-graphql": "mocha 'test/graphql/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
+    "test-controller-rest": "mocha 'test/rest/controller/**/*.test.js' --timeout 10000 --reporter mochawesome",
+    "start": "concurrently \"npm run start-rest\" \"npm run start-graphql\"",
+    "start-rest": "node server.js",
     "start-graphql": "node graphql/server.js"
   },
   "keywords": [],
@@ -18,7 +20,7 @@
     "apollo-server-express": "^3.13.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.1",
-    "express": "^4.17.1",
+    "express": "^4.21.2",
     "graphql": "^16.11.0",
     "swagger-ui-express": "^5.0.1"
   },
