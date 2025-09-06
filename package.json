@@ -4,10 +4,12 @@
   "description": "Esta API permite o registro, login, consulta de usuários e transferências de valores entre usuários. O objetivo é servir de base para estudos de testes e automação de APIs.",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-external": "mocha 'test/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-controller": "mocha 'test/controller/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "start": "node server.js",
+  "test": "mocha test/**/*.test.js --timeout 10000 --reporter mochawesome",
+  "test-rest-external": "mocha test/rest/external/**/*.test.js --timeout 10000 --reporter mochawesome",
+  "test-rest-controller": "mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome",
+  "test-graphql-external": "mocha test/graphql/external/**/*.test.js --timeout 10000 --reporter mochawesome",
+  "test-graphql-controller": "mocha test/graphql/controller/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "start-rest": "node server.js",
     "start-graphql": "node graphql/server.js"
   },
   "keywords": [],
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "chai": "4.5.0",
+    "chai-exclude": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "mocha": "^11.7.1",
     "mochawesome": "^7.1.3",
