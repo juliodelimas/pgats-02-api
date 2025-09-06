@@ -35,7 +35,7 @@ jobs:
     - name: Esperar a API estar Funcionando
       run: sleep 8
 
-    - name: Rodar os testes de API Rest via HTTP
+    - name: Rodar os testes de API Rest via HTTP - teste
       run: npm run test-rest-external
     
     - name: Rodar os testes de API Graphql via HTTP
