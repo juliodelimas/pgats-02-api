@@ -33,7 +33,7 @@ describe('Transfer', () => {
         });
 
         it('Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400', async () => {
-            const resposta = await request(process.env.BASE_URL_REST)
+            const resposta = await request('http://localhost:3000')
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
