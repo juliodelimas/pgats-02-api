@@ -12,7 +12,7 @@ describe('Testes de Transferência', () => {
 
     before(async () => {
          const loginUser = require('../fixture/requisicoes/login/loginUser.json');
-         const resposta = await request(BASE_URL_GRAPHQL)
+         const resposta = await request(process.env.BASE_URL_GRAPHQL)
             .post('')
             .send(loginUser);
            token = resposta.body.data.loginUser.token;
@@ -28,7 +28,7 @@ describe('Testes de Transferência', () => {
         //Escrever o teste
             const respostaEsperada = require('../fixture/respostas/transferencia/validarQueEPossivelTransferirGranaEntreDuasContas.json');
 
-            const respostaTransferencia = await request(BASE_URL_GRAPHQL)
+            const respostaTransferencia = await request(process.env.BASE_URL_GRAPHQL)
             .post('')
             .set('Authorization', `Bearer ${token}`)
             .send(createTransfer);
@@ -41,7 +41,7 @@ describe('Testes de Transferência', () => {
         it('Validar que não é possível transferir quando o saldo é insuficiente', async () => {
         //Escrever o teste  
          createTransfer.variables.value = 10000.01
-         const respostaSaldoInsuficiente = await request(BASE_URL_GRAPHQL)
+         const respostaSaldoInsuficiente = await request(process.env.BASE_URL_GRAPHQL)
          
             .post('')
             .set('Authorization', `Bearer ${token}`)

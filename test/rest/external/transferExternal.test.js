@@ -8,7 +8,7 @@ require('dotenv').config();
 describe('Transfer', () => {
     describe('POST /transfers', () => {
         beforeEach(async () => {
-            const respostaLogin = await request(BASE_URL_REST)
+            const respostaLogin = await request(process.env.BASE_URL_REST)
                 .post('/users/login')
                 .send({
                     username: 'julio',
@@ -19,7 +19,7 @@ describe('Transfer', () => {
         });
 
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
-            const resposta = await request(BASE_URL_REST)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -33,7 +33,7 @@ describe('Transfer', () => {
         });
 
         it('Usando Mocks: Quando informo remetente e destinatario inexistentes recebo 400', async () => {
-            const resposta = await request(BASE_URL_REST)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -47,7 +47,7 @@ describe('Transfer', () => {
         });
 
         it('Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED', async () => {
-            const resposta = await request(BASE_URL_REST)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
