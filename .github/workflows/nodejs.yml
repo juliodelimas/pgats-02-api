@@ -11,31 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Rodar os testes de API via Controller
-      run: npm run test-rest-controller
+      - name: Rodar os testes de API via Controller
+        run: npm run test-rest-controller
 
-    - name: Subir a API Rest
-      run: npm run start-rest &
+      - name: Subir a API Rest
+        run: npm run start-rest &
 
-    - name: Subir a API GraphQL
-      run: npm run start-graphql &
+      - name: Subir a API GraphQL
+        run: npm run start-graphql &
 
-    - name: Esperar a API estar Funcionando
-      run: sleep 8
+      - name: Esperar a API estar Funcionando
+        run: sleep 8
 
-    - name: Rodar os testes de API Rest via HTTP
-      run: npm run test-rest-external
+      - name: Criar .env
+        run: |
+          echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+          echo "BASE_URL_GRAPHQL=${{ secrets.BASE_URL_GRAPHQL }}" >> .env
 
-    - name: Rodar os testes de API graphql via HTTP
-      run: npm run test-graphql-external
+      - name: Rodar os testes de API Rest via HTTP
+        run: npm run test-rest-external
+
+      - name: Rodar os testes de API graphql via HTTP
+        run: npm run test-graphql-external
