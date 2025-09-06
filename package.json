@@ -1,32 +1,37 @@
 {
   "name": "pgats-02-api",
   "version": "1.0.0",
-  "description": "Esta API permite o registro, login, consulta de usuários e transferências de valores entre usuários. O objetivo é servir de base para estudos de testes e automação de APIs.",
+  "description": "API para registro, login, consulta de usuários e transferências. Base para estudos de testes e automação.",
   "main": "app.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "mocha 'test/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-external": "mocha 'test/external/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "test-controller": "mocha 'test/controller/**/*.test.js' --timeout 10000 --reporter mochawesome",
-    "start": "node server.js",
-    "start-graphql": "node graphql/server.js"
+    "start-rest": "node server.js",
+    "start-graphql": "node graphql/server.js",
+    "dev": "nodemon server.js",
+    "test": "mocha test/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "test-rest-external": "mocha test/rest/external/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "test-rest-controller": "mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "test-graphql-external": "mocha test/graphql/external/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "test-graphql-controller": "mocha test/graphql/controller/**/*.test.js --timeout 10000 --reporter mochawesome"
   },
   "keywords": [],
-  "author": "",
+  "author": "Seu Nome",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "apollo-server-express": "^3.13.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.1",
-    "express": "^4.17.1",
+    "express": "^4.21.2",
     "graphql": "^16.11.0",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "chai": "4.5.0",
+    "chai": "^4.5.0",
+    "chai-exclude": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "mocha": "^11.7.1",
     "mochawesome": "^7.1.3",
+    "nodemon": "^3.0.1",
     "sinon": "^21.0.0",
     "supertest": "^7.1.4"
   }
