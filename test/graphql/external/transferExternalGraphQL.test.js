@@ -41,7 +41,7 @@ describe('Testes de Transferência', () => {
         it('Validar que não é possível transferir quando o saldo é insuficiente', async () => {
         //Escrever o teste  
          createTransfer.variables.value = 10000.01
-         const respostaSaldoInsuficiente = await request(process.env.BASE_URL_GRAPHQL)
+         const respostaSaldoInsuficiente = await request('http://localhost:4000/graphql')
          
             .post('')
             .set('Authorization', `Bearer ${token}`)
