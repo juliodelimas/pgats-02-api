@@ -8,7 +8,7 @@ require('dotenv').config();
 describe('Transfer', () => {
     describe('POST /transfers', () => {
         beforeEach(async () => {
-            const respostaLogin = await request(process.env.BASE_URL_REST)
+            const respostaLogin = await request('http://localhost:3000')
                 .post('/users/login')
                 .send({
                     username: 'julio',
@@ -19,7 +19,7 @@ describe('Transfer', () => {
         });
 
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
-            const resposta = await request(process.env.BASE_URL_REST)
+            const resposta = await request('http://localhost:3000')
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
