@@ -47,7 +47,7 @@ describe('Transfer', () => {
         });
 
         it('Usando Mocks: Quando informo valores válidos eu tenho sucesso com 201 CREATED', async () => {
-            const resposta = await request(process.env.BASE_URL_REST)
+            const resposta = await request('http://localhost:3000')
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
