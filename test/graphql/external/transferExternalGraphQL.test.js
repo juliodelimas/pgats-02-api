@@ -12,7 +12,7 @@ describe('Testes de Transferência', () => {
 
     before(async () => {
          const loginUser = require('../fixture/requisicoes/login/loginUser.json');
-         const resposta = await request(process.env.BASE_URL_GRAPHQL)
+         const resposta = await request('http://localhost:4000/graphql')
             .post('')
             .send(loginUser);
            token = resposta.body.data.loginUser.token;
@@ -28,7 +28,7 @@ describe('Testes de Transferência', () => {
         //Escrever o teste
             const respostaEsperada = require('../fixture/respostas/transferencia/validarQueEPossivelTransferirGranaEntreDuasContas.json');
 
-            const respostaTransferencia = await request(process.env.BASE_URL_GRAPHQL)
+            const respostaTransferencia = await request('http://localhost:4000/graphql')
             .post('')
             .set('Authorization', `Bearer ${token}`)
             .send(createTransfer);
